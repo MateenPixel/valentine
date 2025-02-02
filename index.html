@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Website For You <3</title>
+  <!-- Importing a pixel-style font -->
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+  <style>
+    /* Initial animated background */
+    body, html {
+      margin: 0;
+      padding: 0;
+      background: url('https://media.giphy.com/media/l4pTrTloKKGvNCfCg/giphy.gif?cid=ecf05e47njag2xajxjf1b7vwhs6qci43zitkf0b2zu71o8c2&ep=v1_gifs_search&rid=giphy.gif&ct=g') no-repeat center center fixed;
+      background-size: contain;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Press Start 2P', cursive;
+      text-align: center;
+    }
+    .hidden {
+      display: none;
+    }
+    button, input[type="checkbox"] {
+      font-family: inherit;
+      font-size: 1rem;
+      padding: 0.5em 1em;
+      margin: 0.5em;
+      cursor: pointer;
+    }
+    button {
+      background: #ff4081;
+      border: none;
+      color: #fff;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #e73370;
+    }
+    .container {
+      max-width: 90%;
+      background: rgba(255, 255, 255, 0.8); /* slight overlay to improve legibility */
+      padding: 1em;
+      border-radius: 10px;
+      z-index: 1;
+    }
+    .try-again {
+      color: red;
+      margin-top: 1em;
+    }
+    /* Final message styling */
+    .final-message {
+      color: #fff;
+      font-family: 'Press Start 2P', cursive;
+      font-size: 2rem;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- This area will show the typewritten greeting -->
+    <div id="greeting"></div>
+    <!-- This button appears after greeting is typed -->
+    <button id="heyButton" class="hidden">hey!</button>
+    <!-- This area will hold the Valentine question and checkboxes -->
+    <div id="questionSection" class="hidden">
+      <p id="questionText">Will You Be My Valentine?</p>
+      <div>
+        <label>
+          <input type="checkbox" id="yesBox"> Yes
+        </label>
+        <label>
+          <input type="checkbox" id="noBox"> No
+        </label>
+      </div>
+      <p id="tryAgain" class="try-again hidden">Try Again</p>
+    </div>
+  </div>
+
+  <!-- Load the canvas-confetti library from CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+
+  <script>
+    // Change this variable to the desired name
+    const nameToShow = "Mishal";
+    
+    // Reference elements
+    const container = document.querySelector('.container');
+    const greetingEl = document.getElementById('greeting');
+    const heyButton = document.getElementById('heyButton');
+    const questionSection = document.getElementById('questionSection');
+    const noBox = document.getElementById('noBox');
+    const yesBox = document.getElementById('yesBox');
+    const tryAgainMsg = document.getElementById('tryAgain');
+
+    // Function to type out text letter-by-letter
+    function typeText(element, text, delay = 150, callback = null) {
+      let index = 0;
+      const interval = setInterval(() => {
+        element.textContent += text[index];
+        index++;
+        if (index >= text.length) {
+          clearInterval(interval);
+          if (callback) callback();
+        }
+      }, delay);
+    }
+
+    // Start by typing the greeting text
+    const greetingText = `Hey ${nameToShow}`;
+    typeText(greetingEl, greetingText, 150, () => {
+      heyButton.classList.remove('hidden');
+    });
+
+    // Function to trigger confetti burst using canvas-confetti
+    function launchConfetti(options = {}) {
+      confetti(Object.assign({
+        particleCount: 50,
+        spread: 70,
+        origin: { y: 0.6 }
+      }, options));
+    }
+
+    // When the "hey!" button is clicked, hide it, show the question, and launch confetti
+    heyButton.addEventListener('click', () => {
+      heyButton.classList.add('hidden');
+      questionSection.classList.remove('hidden');
+      launchConfetti();
+    });
+
+    // When the "No" checkbox is clicked:
+    noBox.addEventListener('change', () => {
+      if (noBox.checked) {
+        noBox.checked = false;
+        yesBox.focus();
+        tryAgainMsg.classList.remove('hidden');
+        setTimeout(() => {
+          tryAgainMsg.classList.add('hidden');
+        }, 2000);
+        launchConfetti({ particleCount: 20, spread: 50, origin: { y: 0.7 } });
+      }
+    });
+
+    // When the "Yes" checkbox is clicked:
+    yesBox.addEventListener('change', () => {
+      if (yesBox.checked) {
+        launchConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
+        
+        // Remove the interface elements (container) so nothing else is visible.
+        container.remove();
+        
+        // Change the background to a new image (replace with your preferred image URL).
+        document.body.style.background = "url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGhpOWE1YjBhODRtN3R0OWdmczRtd3o4cmh6d3B5N3Ntc3cydTBrNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3q2uvVo7SlYRZDOw/giphy.gif') no-repeat center center fixed";
+        document.body.style.backgroundSize = "cover";
+        
+        // Create and display the final message.
+        const finalMessageEl = document.createElement("div");
+        finalMessageEl.className = "final-message";
+        finalMessageEl.textContent = "Yippee!!!!! I have a gift for you!";
+        document.body.appendChild(finalMessageEl);
+      }
+    });
+  </script>
+</body>
+</html>
