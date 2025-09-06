@@ -1,169 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Website For You <3</title>
-  <!-- Importing a pixel-style font -->
-  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
-  <style>
-    /* Initial animated background */
-    body, html {
-      margin: 0;
-      padding: 0;
-      background: url('https://media.giphy.com/media/l4pTrTloKKGvNCfCg/giphy.gif?cid=ecf05e47njag2xajxjf1b7vwhs6qci43zitkf0b2zu71o8c2&ep=v1_gifs_search&rid=giphy.gif&ct=g') no-repeat center center fixed;
-      background-size: contain;
-      height: 100%;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-family: 'Press Start 2P', cursive;
-      text-align: center;
-    }
-    .hidden {
-      display: none;
-    }
-    button, input[type="checkbox"] {
-      font-family: inherit;
-      font-size: 1rem;
-      padding: 0.5em 1em;
-      margin: 0.5em;
-      cursor: pointer;
-    }
-    button {
-      background: #ff4081;
-      border: none;
-      color: #fff;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-    button:hover {
-      background: #e73370;
-    }
-    .container {
-      max-width: 90%;
-      background: rgba(255, 255, 255, 0.8); /* slight overlay to improve legibility */
-      padding: 1em;
-      border-radius: 10px;
-      z-index: 1;
-    }
-    .try-again {
-      color: red;
-      margin-top: 1em;
-    }
-    /* Final message styling */
-    .final-message {
-      color: #fff;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 2rem;
-      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
-    }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Mishawty Jar</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#ffeef6; --bg2:#fff8e8; --ink:#1d1d1f; --muted:#6b6b6b;
+  --paper:#fff; --paper-edge:#e8e8e8; --shadow:0 14px 40px rgba(0,0,0,.14);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0; font-family:'Press Start 2P', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  background:
+    radial-gradient(1000px 700px at 15% -10%, #ffd9e8 0%, rgba(255,217,232,0) 60%),
+    radial-gradient(1000px 700px at 110% 0%, #fff1c9 0%, rgba(255,241,201,0) 60%),
+    linear-gradient(180deg,var(--bg1),var(--bg2));
+  color:var(--ink);
+  display:grid; place-items:center; padding:24px;
+}
+.wrap{ width:min(1000px, 94vw); }
+.header{ text-align:center; margin-bottom:8px }
+.header h1{ font-size:clamp(18px, 3vw, 26px); margin:0 0 8px }
+.header p{ margin:0; color:var(--muted); font-size:clamp(12px, 1.8vw, 14px) }
+
+.stage{
+  position:relative; margin: 18px auto 8px;
+  width:min(860px, 100%);
+  display:grid; grid-template-columns: 1fr 1fr; gap:24px;
+}
+@media (max-width:820px){ .stage{ grid-template-columns:1fr } }
+
+/* JAR */
+.jarWrap{ display:grid; place-items:center; }
+#jar{ width:min(420px, 78vw); filter: drop-shadow(0 16px 32px rgba(0,0,0,.12)); cursor:pointer }
+#jar .lid{ transform-origin: 32px 14px; transition: transform .45s cubic-bezier(.2,.9,.2,1) }
+#jar.open .lid{ transform: rotate(-32deg) translateY(-2px) }
+#jar .shine{ animation: twinkle 4s ease-in-out infinite }
+@keyframes twinkle{ 0%,100%{opacity:.35} 50%{opacity:.6} }
+
+/* NOTE */
+.noteWrap{ position:relative; min-height:320px; display:grid; place-items:center }
+.note{
+  position:relative; max-width:560px; width:100%;
+  background:var(--paper); border:1px solid var(--paper-edge); border-radius:14px;
+  padding:18px; box-shadow:var(--shadow); color:#2b2b2b; line-height:1.6;
+  opacity:0; transform: translateX(20px) scale(.9) rotate(-2deg);
+  transition: opacity .25s ease, transform .5s cubic-bezier(.2,.9,.2,1);
+}
+.note.show{ opacity:1; transform: translateX(0) scale(1) rotate(0) }
+.note.uncrumple{ animation: uncrumple .6s cubic-bezier(.2,.9,.2,1) both }
+@keyframes uncrumple{
+  0%{ transform: translateX(40px) scale(.75) rotate(-6deg) skew(-2deg,1deg) }
+  40%{ transform: translateX(-6px) scale(1.02) rotate(1deg) }
+  70%{ transform: translateX(4px) scale(.995) rotate(-.6deg) }
+  100%{ transform: translateX(0) scale(1) rotate(0) }
+}
+.note::before{
+  content:""; position:absolute; inset:0; border-radius:12px; pointer-events:none;
+  background:
+    radial-gradient(120px 60px at 10% 15%, rgba(0,0,0,.06) 0, transparent 70%),
+    radial-gradient(120px 60px at 90% 85%, rgba(0,0,0,.05) 0, transparent 70%);
+  mix-blend-mode:multiply; opacity:.35;
+}
+/* image inside note */
+.note .pic{
+  width:100%; max-height:260px; object-fit:cover; border-radius:10px; display:none; margin-bottom:12px;
+}
+.note.has-img .pic{ display:block }
+
+.controls{ display:flex; gap:10px; justify-content:center; margin-top:10px; flex-wrap:wrap }
+button{ appearance:none; border:none; cursor:pointer; padding:10px 14px; border-radius:12px; font-weight:700; box-shadow:var(--shadow) }
+button.secondary{ background:#f3f3f3; color:#111 }
+button:active{ transform: translateY(1px) }
+
+.toast{ position:fixed; bottom:18px; left:50%; transform:translateX(-50%); background:#111; color:#fff; padding:8px 12px; border-radius:10px; opacity:0; transition:.25s; font-size:12px }
+.toast.show{ opacity:1 }
+</style>
 </head>
 <body>
-  <div class="container">
-    <!-- This area will show the typewritten greeting -->
-    <div id="greeting"></div>
-    <!-- This button appears after greeting is typed -->
-    <button id="heyButton" class="hidden">hey!</button>
-    <!-- This area will hold the Valentine question and checkboxes -->
-    <div id="questionSection" class="hidden">
-      <p id="questionText">Will You Be My Valentine?</p>
-      <div>
-        <label>
-          <input type="checkbox" id="yesBox"> Yes
-        </label>
-        <label>
-          <input type="checkbox" id="noBox"> No
-        </label>
+  <div class="wrap" role="application" aria-label="Animated Love Jar">
+    <div class="header">
+      <h1>Here’s a jar for you to open! #genderrolesarenotreal</h1>
+      <p>I love you Mishal! Find out why 💫</p>
+    </div>
+
+    <div class="stage">
+      <!-- LEFT: the animated jar -->
+      <div class="jarWrap">
+        <!-- Glassy SVG jar with HEARTS -->
+        <svg id="jar" viewBox="0 0 64 64" aria-label="Tap the jar">
+          <defs>
+            <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffd1df"/>
+              <stop offset="1" stop-color="#ffe18b"/>
+            </linearGradient>
+            <linearGradient id="lidGrad" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#d7a1b2"/>
+              <stop offset="1" stop-color="#c88f9f"/>
+            </linearGradient>
+            <radialGradient id="shineGrad" cx="30%" cy="25%" r="60%">
+              <stop offset="0" stop-color="#ffffff" stop-opacity=".8"/>
+              <stop offset=".6" stop-color="#ffffff" stop-opacity=".2"/>
+              <stop offset="1" stop-color="#ffffff" stop-opacity="0"/>
+            </radialGradient>
+          </defs>
+
+          <!-- Lid (opens) -->
+          <g class="lid">
+            <rect x="14" y="10" width="36" height="6" rx="2" fill="url(#lidGrad)"/>
+            <rect x="18" y="8" width="28" height="3" rx="1.5" fill="#a67282" opacity=".6"/>
+          </g>
+
+          <!-- Jar glass -->
+          <rect x="10" y="16" width="44" height="42" rx="14" fill="url(#glass)" opacity=".45" stroke="#e7aaba" />
+          <rect x="12" y="18" width="40" height="38" rx="12" fill="url(#shineGrad)" class="shine"/>
+
+          <!-- hearts inside -->
+          <g fill="#fff" opacity="1">
+            <g transform="translate(24,24) scale(0.9)"><path d="M8 14 C3 10, 0 8, 0 5.2 0 3 1.8 1.5 4 1.5 5.5 1.5 6.7 2.2 8 3.6 9.3 2.2 10.5 1.5 12 1.5 14.2 1.5 16 3 16 5.2 16 8 13 10 8 14Z"/></g>
+            <g transform="translate(36,32) scale(0.8)"><path d="M8 14 C3 10, 0 8, 0 5.2 0 3 1.8 1.5 4 1.5 5.5 1.5 6.7 2.2 8 3.6 9.3 2.2 10.5 1.5 12 1.5 14.2 1.5 16 3 16 5.2 16 8 13 10 8 14Z"/></g>
+            <g transform="translate(30,42) scale(0.85)"><path d="M8 14 C3 10, 0 8, 0 5.2 0 3 1.8 1.5 4 1.5 5.5 1.5 6.7 2.2 8 3.6 9.3 2.2 10.5 1.5 12 1.5 14.2 1.5 16 3 16 5.2 16 8 13 10 8 14Z"/></g>
+          </g>
+
+          <ellipse cx="32" cy="58" rx="16" ry="3" fill="rgba(0,0,0,.08)"/>
+        </svg>
       </div>
-      <p id="tryAgain" class="try-again hidden">Try Again</p>
+
+      <!-- RIGHT: the note area (random photo optional) -->
+      <div class="noteWrap">
+        <div id="note" class="note">
+          <img id="noteImg" class="pic" alt="us 💛">
+          <div id="noteText">Tap the jar to reveal your first reason ✨</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="resetBtn" class="secondary">♻️ Reset</button>
     </div>
   </div>
 
-  <!-- Load the canvas-confetti library from CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
-  <script>
-    // Change this variable to the desired name
-    const nameToShow = "Mishal";
-    
-    // Reference elements
-    const container = document.querySelector('.container');
-    const greetingEl = document.getElementById('greeting');
-    const heyButton = document.getElementById('heyButton');
-    const questionSection = document.getElementById('questionSection');
-    const noBox = document.getElementById('noBox');
-    const yesBox = document.getElementById('yesBox');
-    const tryAgainMsg = document.getElementById('tryAgain');
+<script>
+/* ========= CONFIG =========
+   1) Put your images in ./images/
+   EITHER list them explicitly:
+     const IMAGE_FILES = ["1.jpg","2.jpg","trip.png","goofy.webp"];
+   OR auto-generate numbered names (e.g., 1.jpg..20.jpg):
+     const IMAGE_AUTOGEN = { count: 20, prefix: "", pad: 0, ext: ".jpg" };
+   If both are filled, the explicit LIST is used.
+*/
 
-    // Function to type out text letter-by-letter
-    function typeText(element, text, delay = 150, callback = null) {
-      let index = 0;
-      const interval = setInterval(() => {
-        element.textContent += text[index];
-        index++;
-        if (index >= text.length) {
-          clearInterval(interval);
-          if (callback) callback();
-        }
-      }, delay);
+const IMAGE_PATH = "images/";
+const IMAGE_FILES = [
+  "100_0056.JPG",
+  "bears.png",
+  "DSC01546.JPEG",
+  "DSC06115.JPEG",
+  "DSC06419.JPG",
+  "IMG_0921.JPG",
+  "IMG_3904.jpeg",
+  "IMG_6031.jpeg",
+  "IMG_6035.jpeg",
+  "IMG_6186.JPG",
+  "IMG_8004.JPG",
+  "IMG_8073.JPG",
+  "IMG_9217.JPG",
+  "IMG_9227.JPG"
+];
+const IMAGE_AUTOGEN = { count: 0, prefix: "", pad: 0, ext: ".jpg" };
+
+
+/* Your reasons (strings). Order gets shuffled every visit & on reset */
+const NOTES = [
+  "I really love your laugh, it's very cute, and it makes me smile and laugh too",
+  "Long distance with you is like driving to Shotted, like god its so far but I do love it, at least on Fridays!",
+  "If I had to pick between a Porsche and you, I'd pick you!",
+  "Click <a href='https://open.spotify.com/playlist/4HuCSmAq7t7QWyluxhgNhT?si=a9a0a09010724d06'>this playlist</a> I made for you 🎶",
+  "I love all of your curves (egg head and eyes) and edges (super sharp jawline)",
+  "Are you gonna keep playing eye tag or are you gonna holla at your boy?",
+  "I love helping you pick outfits and seeing how amazing you look in everything, super yummy. One day you’ll catch up to my fashion prowess.",
+  "If looks could kill, you'd go to jail for a lot of homicides... that's a lot of life sentences in prison",
+  "You're proof I have excellent taste",
+  "If you were a movie, your letterboxd reviews would be straight 5 stars, cause I wrote them all",
+  "You ruined other people for me, rude.",
+  "I'd bark if you told me to.",
+  "I don't like rewatching things, but if you were a show, I'd watch it over and over",
+  "I love your sassiness... most of the time",
+  "You're my morning (afternoon) coffee",
+  "Even though your mom pays me to date you, I'd date you even if I had to pay",
+  "I like having you to show off, better than any trophy",
+  "I text you back during my Clash Royale games btw",
+  "Happy half year Mishal! I love you!",
+  "I’d pick you again and again."
+];
+
+/* ===== helpers ===== */
+const $ = s => document.querySelector(s);
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000); };
+const burst = (count=120)=> confetti?.({particleCount:count,spread:90,origin:{y:.65}});
+
+function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+function pad(n, p){ return String(n).padStart(p, "0"); }
+
+function buildImagePool(){
+  if(IMAGE_FILES.length) return IMAGE_FILES.map(f=>IMAGE_PATH+f);
+  if(IMAGE_AUTOGEN.count>0){
+    const arr=[];
+    for(let i=1;i<=IMAGE_AUTOGEN.count;i++){
+      arr.push(IMAGE_PATH + IMAGE_AUTOGEN.prefix + pad(i, IMAGE_AUTOGEN.pad) + IMAGE_AUTOGEN.ext);
     }
+    return arr;
+  }
+  return []; // no images = text-only
+}
+const IMG_POOL = buildImagePool();
 
-    // Start by typing the greeting text
-    const greetingText = `Hey ${nameToShow}`;
-    typeText(greetingEl, greetingText, 150, () => {
-      heyButton.classList.remove('hidden');
-    });
+/* ===== state ===== */
+const state = { notes: [], opened: [] }; // opened isn't persisted so it reshuffles each visit
 
-    // Function to trigger confetti burst using canvas-confetti
-    function launchConfetti(options = {}) {
-      confetti(Object.assign({
-        particleCount: 50,
-        spread: 70,
-        origin: { y: 0.6 }
-      }, options));
-    }
+/* ===== UI / animations ===== */
+const jar = $('#jar');
+const noteEl = $('#note');
+const noteText = $('#noteText');
+const noteImg = $('#noteImg');
 
-    // When the "hey!" button is clicked, hide it, show the question, and launch confetti
-    heyButton.addEventListener('click', () => {
-      heyButton.classList.add('hidden');
-      questionSection.classList.remove('hidden');
-      launchConfetti();
-    });
+function openLid(){ jar.classList.add('open'); }
+function closeLid(){ jar.classList.remove('open'); }
 
-    // When the "No" checkbox is clicked:
-    noBox.addEventListener('change', () => {
-      if (noBox.checked) {
-        noBox.checked = false;
-        yesBox.focus();
-        tryAgainMsg.classList.remove('hidden');
-        setTimeout(() => {
-          tryAgainMsg.classList.add('hidden');
-        }, 2000);
-        launchConfetti({ particleCount: 20, spread: 50, origin: { y: 0.7 } });
-      }
-    });
+function pickRandomImage(){
+  if(!IMG_POOL.length) return null;
+  const i = Math.floor(Math.random()*IMG_POOL.length);
+  return IMG_POOL[i];
+}
 
-    // When the "Yes" checkbox is clicked:
-    yesBox.addEventListener('change', () => {
-      if (yesBox.checked) {
-        launchConfetti({ particleCount: 100, spread: 100, origin: { y: 0.5 } });
-        
-        // Remove the interface elements (container) so nothing else is visible.
-        container.remove();
-        
-        // Change the background to a new image (replace with your preferred image URL).
-        document.body.style.background = "url('https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcGhpOWE1YjBhODRtN3R0OWdmczRtd3o4cmh6d3B5N3Ntc3cydTBrNiZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l3q2uvVo7SlYRZDOw/giphy.gif') no-repeat center center fixed";
-        document.body.style.backgroundSize = "cover";
-        
-        // Create and display the final message.
-        const finalMessageEl = document.createElement("div");
-        finalMessageEl.className = "final-message";
-        finalMessageEl.textContent = "Yippee!!!!! I have a gift for you!";
-        document.body.appendChild(finalMessageEl);
-      }
-    });
-  </script>
+function showNote(text){
+  // pick a random image each time (independent of the note)
+  const src = pickRandomImage();
+  if(src){
+    noteImg.onload = ()=> noteEl.classList.add('has-img');
+    noteImg.onerror = ()=> { noteEl.classList.remove('has-img'); noteImg.removeAttribute('src'); };
+    noteImg.src = src + (src.includes("?") ? "&" : "?") + "t="+Date.now(); // cache-bust for variety if needed
+  }else{
+    noteEl.classList.remove('has-img');
+    noteImg.removeAttribute('src');
+  }
+
+  noteText.innerHTML = text;
+  noteEl.classList.add('show');
+  noteEl.classList.remove('uncrumple'); void noteEl.offsetWidth; noteEl.classList.add('uncrumple');
+}
+
+function unopenedIndex(){
+  const u = state.notes.map((_,i)=>i).filter(i=>!state.opened.includes(i));
+  if(!u.length) return null; return u[Math.floor(Math.random()*u.length)];
+}
+
+function reveal(){
+  if(!state.notes.length){ toast('No notes yet!'); return; }
+  const idx = unopenedIndex();
+  openLid();
+  if(idx===null){
+    setTimeout(()=>{ showNote('All notes opened! ♻️ Reset for a fresh shuffle.'); burst(80); closeLid(); }, 160);
+    return;
+  }
+  setTimeout(()=>{
+    state.opened.push(idx);
+    showNote(state.notes[idx]); burst(140);
+    setTimeout(closeLid, 700);
+  }, 180);
+}
+
+function resetJar(){
+  state.opened = [];
+  state.notes = shuffle([...state.notes]); // reshuffle on reset
+  openLid();
+  setTimeout(()=>{
+    showNote('Fresh jar! Tap the jar to draw a note ✨');
+    setTimeout(closeLid, 600);
+  }, 120);
+}
+
+/* ===== init ===== */
+state.notes = shuffle([...NOTES]);      // random order each visit
+noteEl.classList.add('show');
+noteText.textContent = 'Tap the jar to reveal your first reason ✨';
+
+jar.addEventListener('click', reveal);
+$('#resetBtn').addEventListener('click', resetJar);
+// keyboard shortcut: R to reveal
+addEventListener('keydown', e=>{ if(e.key.toLowerCase()==='r') reveal(); });
+</script>
 </body>
 </html>
